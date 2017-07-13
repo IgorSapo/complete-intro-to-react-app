@@ -1,6 +1,17 @@
 {
   "scripts": {
-    "api": "node ratingsAPI.js"
+    "api": "node ratingsAPI.js",
+    "format": "./node_modules/.bin/prettier --write --single-quote --parser=flow --tab-width=2 js/**/*.{js,jsx}",
+    "lint": "eslint **/*.{js,jsx} --quiet",
+    "build": "./node_modules/.bin/webpack",
+    "watch": "./node_modules/.bin/webpack --watch",
+    "dev": "./node_modules/.bin/webpack-dev-server",
+    "test": "./node_modules/.bin/jest",
+    "test:update": "./node_modules/.bin/jest -u",
+    "test:coverage": "./node_modules/.bin/jest --coverage"
+  },
+  "jest": {
+    "snapshotSerializers": [ "jest-serializer-enzyme" ]
   },
   "dependencies": {
     "axios": "0.16.1",
@@ -10,6 +21,7 @@
     "compression": "1.6.2",
     "cors": "2.8.3",
     "express": "4.15.3",
+    "global": "^4.3.2",
     "lodash": "4.17.4",
     "preact": "8.1.0",
     "preact-compat": "3.16.0",
@@ -37,7 +49,7 @@
     "babel-preset-env": "1.5.1",
     "babel-preset-react": "6.24.1",
     "enzyme": "2.8.2",
-    "eslint": "3.19.0",
+    "eslint": "^4.2.0",
     "eslint-config-airbnb": "15.0.1",
     "eslint-config-prettier": "2.1.1",
     "eslint-config-react": "1.1.7",
