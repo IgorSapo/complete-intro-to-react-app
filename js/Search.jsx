@@ -1,6 +1,7 @@
 import React from 'react';
-import preload from '../data.json';
+import PropTypes from 'prop-types';
 import ShowCard from './ShowCard';
+import Header from './Header';
 
 class Search extends React.Component {
   state = {
@@ -15,17 +16,24 @@ class Search extends React.Component {
   render() {
     return (
       <div className="search">
-        <header>
-          <h1>Video</h1>
-          <input
-            type="text"
-            value={this.state.searchTerm}
-            onChange={this.handleSearch}
-            placeholder="Search"
-          />
-        </header>
+        <Header
+          showSearch
+          handleSearch={this.handleSearch}
+          searchTerm={this.state.searchTerm}
+        />
+        {
+          // <header>
+          //   <h1>Video</h1>
+          // <input
+          //   type="text"
+          //   value={this.state.searchTerm}
+          //   onChange={this.handleSearch}
+          //   placeholder="Search"
+          // />
+          //</header>
+        }
         <div>
-          {preload.shows
+          {this.props.shows
             .filter(show =>
               `${show.title} ${show.description}`
                 .toLowerCase()
@@ -37,5 +45,9 @@ class Search extends React.Component {
     );
   }
 }
+
+Search.propTypes = {
+  shows: PropTypes.arrayOf(PropTypes.object).isRequired
+};
 
 export default Search;
