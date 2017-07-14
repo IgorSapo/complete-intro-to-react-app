@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setSearchTerm } from './actionCreators';
 
 const Header = ({ showSearch, handleSearch, searchTerm }) => {
   let utilSpace;
@@ -34,4 +36,14 @@ Header.defaultProps = {
   showSearch: false
 };
 
-export default Header;
+const mapStateToProps = state => ({
+  searchTerm: state.searchTerm
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleSearch(e) {
+    dispatch(setSearchTerm(e.target.value));
+  }
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

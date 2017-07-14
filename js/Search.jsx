@@ -1,53 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import ShowCard from './ShowCard';
 import Header from './Header';
 
-class Search extends React.Component {
-  state = {
-    searchTerm: ''
-  };
-
-  handleSearch = e =>
-    this.setState({
-      searchTerm: e.target.value
-    });
-
-  render() {
-    return (
-      <div className="search">
-        <Header
-          showSearch
-          handleSearch={this.handleSearch}
-          searchTerm={this.state.searchTerm}
-        />
-        {
-          // <header>
-          //   <h1>Video</h1>
-          // <input
-          //   type="text"
-          //   value={this.state.searchTerm}
-          //   onChange={this.handleSearch}
-          //   placeholder="Search"
-          // />
-          //</header>
-        }
-        <div>
-          {this.props.shows
-            .filter(show =>
-              `${show.title} ${show.description}`
-                .toLowerCase()
-                .includes(this.state.searchTerm.toLowerCase())
-            )
-            .map(show => <ShowCard key={show.imdbID} {...show} />)}
-        </div>
-      </div>
-    );
-  }
-}
+const Search = ({ shows, searchTerm, handleSearch }) => (
+  <div className="search">
+    <Header showSearch />
+    <div>
+      {shows
+        .filter(show =>
+          `${show.title} ${show.description}`
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+        )
+        .map(show => <ShowCard key={show.imdbID} {...show} />)}
+    </div>
+  </div>
+);
 
 Search.propTypes = {
   shows: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
-export default Search;
+const mapStateToProps = state => ({
+  searchTerm: state.searchTerm
+});
+
+export default connect(mapStateToProps)(Search);
