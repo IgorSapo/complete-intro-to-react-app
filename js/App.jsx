@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import Landing from './Landing';
 import Search from './Search';
@@ -16,21 +17,27 @@ const routedDetails = props => {
   return <Details {...selectedShow} {...props} />;
 };
 
+routedDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired
+};
+
 const routedSearch = props => <Search shows={preload.shows} {...props} />;
 
 const App = () => (
-  <BrowserRouter>
-    <Provider store={store}>
-      <div className="app">
-        <Switch>
-          <Route exact path="/" component={Landing} />
-          <Route path="/search" component={routedSearch} />
-          <Route path="/details/:id" component={routedDetails} />
-          <Route component={FourOhFour} />
-        </Switch>
-      </div>
-    </Provider>
-  </BrowserRouter>
+  <Provider store={store}>
+    <div className="app">
+      <Switch>
+        <Route exact path="/" component={Landing} />
+        <Route path="/search" component={routedSearch} />
+        <Route path="/details/:id" component={routedDetails} />
+        <Route component={FourOhFour} />
+      </Switch>
+    </div>
+  </Provider>
 );
 
 export default App;

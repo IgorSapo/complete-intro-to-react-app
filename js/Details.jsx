@@ -10,15 +10,12 @@ class Details extends React.Component {
     if (!this.props.rating) {
       this.props.getAPIData();
     }
-    // axios.get(`http://localhost:3000/${this.props.imdbID}`).then(response => {
-    //   this.setState({ apiData: response.data });
-    // });
   }
 
   render() {
     const { title, description, year, poster, trailer } = this.props;
     let rating;
-    if (!!this.props.rating) {
+    if (this.props.rating) {
       rating = <h3>{this.props.rating}</h3>;
     } else {
       rating = <Spinner />;
@@ -49,6 +46,16 @@ class Details extends React.Component {
     );
   }
 }
+
+Details.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
+  trailer: PropTypes.string.isRequired,
+  rating: PropTypes.string.isRequired,
+  getAPIData: PropTypes.func.isRequired
+};
 
 const mapStateToProps = (state, ownProps) => {
   const apiData = state.apiData[ownProps.imdbID]

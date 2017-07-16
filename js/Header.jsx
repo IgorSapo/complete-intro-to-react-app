@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setSearchTerm } from './actionCreators';
@@ -34,6 +35,12 @@ const Header = ({ showSearch, handleSearch, searchTerm }) => {
 
 Header.defaultProps = {
   showSearch: false
+};
+
+Header.propTypes = {
+  showSearch: PropTypes.bool,
+  handleSearch: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ShowCard from './ShowCard';
 import Header from './Header';
 
-const Search = ({ shows, searchTerm, handleSearch }) => (
+const Search = ({ shows, searchTerm }) => (
   <div className="search">
     <Header showSearch />
     <div>
@@ -20,7 +20,8 @@ const Search = ({ shows, searchTerm, handleSearch }) => (
 );
 
 Search.propTypes = {
-  shows: PropTypes.arrayOf(PropTypes.object).isRequired
+  shows: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchTerm: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

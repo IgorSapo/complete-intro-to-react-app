@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { /* Link, */ withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setSearchTerm } from './actionCreators';
 
@@ -37,6 +38,14 @@ class Landing extends React.Component {
     );
   }
 }
+
+Landing.propTypes = {
+  searchTerm: PropTypes.string.isRequired,
+  handleSearch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired
+  }).isRequired
+};
 
 const mapStateToProps = state => ({
   searchTerm: state.searchTerm

@@ -4,9 +4,10 @@ const webpack = require('webpack');
 module.exports = {
   context: __dirname,
   entry: [
-    'react-hot-loader/patch',
-    'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
+    // 'react-hot-loader/patch',  // fixing React HMR
+    // 'webpack-dev-server/client?http://localhost:8080',
+    // 'webpack/hot/only-dev-server',
+    'webpack-hot-middleware/client?path=__webpack_hmr&timeout=2000', // fixing React HMR
     './js/ClientApp.jsx'
   ],
   devtool: 'cheap-eval-source-map',
@@ -24,7 +25,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json']
   },
   stats: {
-    colors: true,
+    /* colors: true, */
     reasons: true,
     chunks: true
   },

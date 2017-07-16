@@ -15,4 +15,4 @@ export const getAPIDetails = imdbID => dispatch =>
   axios
     .get(`http://localhost:3000/${imdbID}`)
     .then(response => dispatch(addAPIData(response.data)))
-    .catch(error => console.error('axios error', error));
+    .catch(error => console.error('axios error', error)); // eslint-disable-line no-console
