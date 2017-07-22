@@ -1,62 +1,51 @@
+// @flow
+
 import React from 'react';
-import PropTypes from 'prop-types';
-import { /* Link, */ withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import type { RouterHistory } from 'react-router-dom';
+import { object } from 'prop-types';
 import { setSearchTerm } from './actionCreators';
 
 class Landing extends React.Component {
-  constructor(props) {
-    super(props);
-    this.goToSearch = this.goToSearch.bind(this);
-  }
-
-  goToSearch(e) {
-    e.preventDefault();
-    if (e.target.name === 'browseAll') {
-      this.props.handleSearch(e);
-    }
+  static contextTypes = {
+    history: object
+  };
+  props: {
+    searchTerm: string,
+    handleSearchTermChange: Function,
+    history: RouterHistory
+  };
+  goToSearch = event => {
+    event.preventDefault();
     this.props.history.push('/search');
-  }
-
+  };
   render() {
-    const { searchTerm, handleSearch } = this.props;
     return (
       <div className="landing">
-        <h2>Video</h2>
+        <h1>svideo</h1>
         <form onSubmit={this.goToSearch}>
           <input
+            onChange={this.props.handleSearchTermChange}
+            value={this.props.searchTerm}
             type="text"
             placeholder="Search"
-            value={searchTerm}
-            onChange={handleSearch}
           />
         </form>
-        <button name="browseAll" onClick={this.goToSearch} value="">
-          or browse all
-        </button>
+        <Link to="/search">or Browse All</Link>
       </div>
     );
   }
 }
 
-Landing.propTypes = {
-  searchTerm: PropTypes.string.isRequired,
-  handleSearch: PropTypes.func.isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
-};
-
 const mapStateToProps = state => ({
   searchTerm: state.searchTerm
 });
 
-const mapDispatchToProps = dispatch => ({
-  handleSearch(e) {
-    dispatch(setSearchTerm(e.target.value));
+const mapDispatchToProps = (dispatch: Function) => ({
+  handleSearchTermChange(event) {
+    dispatch(setSearchTerm(event.target.value));
   }
 });
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(Landing)
-);
+export default connect(mapStateToProps, mapDispatchToProps)(Landing);
