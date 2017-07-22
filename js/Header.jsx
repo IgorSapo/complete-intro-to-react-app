@@ -1,31 +1,32 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setSearchTerm } from './actionCreators';
 
-const Header = (props: { showSearch?: boolean, handleSearchTermChange: Function, searchTerm: string }) => {
+const Header = ({ showSearch, handleSearch, searchTerm }) => {
   let utilSpace;
-  if (props.showSearch) {
+  if (showSearch) {
     utilSpace = (
-      <input type="text" placeholder="Search" value={props.searchTerm} onChange={props.handleSearchTermChange} />
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder="Search"
+      />
     );
   } else {
     utilSpace = (
-      <h2 className="header-back">
-        <Link to="/search">
-          Back
-        </Link>
+      <h2>
+        <Link to="/search">Back</Link>
       </h2>
     );
   }
+
   return (
     <header>
       <h1>
-        <Link to="/">
-          svideo
-        </Link>
+        <Link to="/">Video</Link>
       </h1>
       {utilSpace}
     </header>
@@ -36,10 +37,19 @@ Header.defaultProps = {
   showSearch: false
 };
 
-const mapStateToProps = state => ({ searchTerm: state.searchTerm });
-const mapDispatchToProps = (dispatch: Function) => ({
-  handleSearchTermChange(event) {
-    dispatch(setSearchTerm(event.target.value));
+Header.propTypes = {
+  showSearch: PropTypes.bool,
+  handleSearch: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => ({
+  searchTerm: state.searchTerm
+});
+
+const mapDispatchToProps = dispatch => ({
+  handleSearch(e) {
+    dispatch(setSearchTerm(e.target.value));
   }
 });
 

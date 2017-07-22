@@ -1,10 +1,9 @@
-// @flow
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import getAPIDetails from './asyncActions';
 import Header from './Header';
 import Spinner from './Spinner';
-import { getAPIDetails } from './actionCreators';
 
 class Details extends React.Component {
   componentDidMount() {
@@ -12,35 +11,35 @@ class Details extends React.Component {
       this.props.getAPIData();
     }
   }
-  props: {
-    rating: string,
-    getAPIData: Function,
-    show: Show
-  };
+
   render() {
-    const { title, description, year, poster, trailer } = this.props.show;
+    const { title, description, year, poster, trailer } = this.props;
     let rating;
     if (this.props.rating) {
       rating = <h3>{this.props.rating}</h3>;
     } else {
       rating = <Spinner />;
     }
+
     return (
       <div className="details">
         <Header />
         <section>
           <h1>{title}</h1>
-          <h2>({year})</h2>
+          <h2>{year}</h2>
           {rating}
-          <img src={`/public/img/posters/${poster}`} alt={`Poster for ${title}`} />
+          <img
+            alt={`Poster for ${title}`}
+            src={`/public/img/posters/${poster}`}
+          />
           <p>{description}</p>
         </section>
-        <div>
+        <div className="">
           <iframe
-            title="YouTube Video Frame"
-            src={`https://www.youtube-nocookie.com/embed/${trailer}?rel=0&amp;controls=0&amp;showinfo=0`}
+            src={`https://www.youtube-nocookie.com/embed/${trailer}?rel=0&amp;controls=1&amp;showinfo=0`}
             frameBorder="0"
-            allowFullScreen
+            allowFullScreen="0"
+            title={`Trailer for ${title}`}
           />
         </div>
       </div>
@@ -48,16 +47,28 @@ class Details extends React.Component {
   }
 }
 
+Details.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  year: PropTypes.string.isRequired,
+  poster: PropTypes.string.isRequired,
+  trailer: PropTypes.string.isRequired,
+  rating: PropTypes.string.isRequired,
+  getAPIData: PropTypes.func.isRequired
+};
+
 const mapStateToProps = (state, ownProps) => {
-  const apiData = state.apiData[ownProps.show.imdbID] ? state.apiData[ownProps.show.imdbID] : {};
+  const apiData = state.apiData[ownProps.imdbID]
+    ? state.apiData[ownProps.imdbID]
+    : {};
   return {
     rating: apiData.rating
   };
 };
 
-const mapDispatchToProps = (dispatch: Function, ownProps) => ({
+const mapDispatchToProps = (dispatch, ownProps) => ({
   getAPIData() {
-    dispatch(getAPIDetails(ownProps.show.imdbID));
+    dispatch(getAPIDetails(ownProps.imdbID));
   }
 });
 

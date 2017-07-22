@@ -1,35 +1,53 @@
-// @flow
-
 import React from 'react';
-import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import type { Match } from 'react-router-dom';
-import AsyncRoute from './AsyncRoute';
-import store from './store';
 import preload from '../data.json';
+import store from './store';
+import AsyncRoute from './AsyncRoute';
+
+const FourOhFour = () => <h1>404</h1>;
+
+const AsyncSearch = props => (
+  <AsyncRoute
+    props={Object.assign({ shows: preload.shows }, props)}
+    loadingPromise={import('./Search')}
+  />
+);
+
+const AsyncLanding = props => (
+  <AsyncRoute props={props} loadingPromise={import('./Landing')} />
+);
+
+const AsyncDetails = props => {
+  const selectedShow = preload.shows.find(
+    show => props.match.params.id === show.imdbID
+  );
+  return (
+    <AsyncRoute
+      props={Object.assign(selectedShow, props)}
+      loadingPromise={import('./Details')}
+    />
+  );
+};
+
+AsyncDetails.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }).isRequired
+  }).isRequired
+};
 
 const App = () => (
   <Provider store={store}>
     <div className="app">
-      <Route exact path="/" component={props => <AsyncRoute props={props} loadingPromise={import('./Landing')} />} />
-      <Route
-        path="/search"
-        component={props => (
-          <AsyncRoute loadingPromise={import('./Search')} props={Object.assign({ shows: preload.shows }, props)} />
-        )}
-      />
-      <Route
-        path="/details/:id"
-        component={(props: { match: Match }) => {
-          const selectedShow = preload.shows.find((show: Show) => props.match.params.id === show.imdbID);
-          return (
-            <AsyncRoute
-              loadingPromise={import('./Details')}
-              props={Object.assign({ show: selectedShow, match: {} }, props)}
-            />
-          );
-        }}
-      />
+      <Switch>
+        <Route exact path="/" component={AsyncLanding} />
+        <Route path="/search" component={AsyncSearch} />
+        <Route path="/details/:id" component={AsyncDetails} />
+        <Route component={FourOhFour} />
+      </Switch>
     </div>
   </Provider>
 );
